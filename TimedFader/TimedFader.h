@@ -3,10 +3,32 @@
 #include "vdjDsp8.h"
 
 #include <cmath>
+#include <stdio.h>
+#include <float.h>
+
 // round() is only defined in C++11 so we use this workaround
 #define round(v) ((int)floor((v)+0.5f))
 
-class CMyPlugin8 : public IVdjPluginDsp8
+enum
+{
+	PARAM_PlayDuration = 0,
+	PARAM_FadeDuration,
+	PARAM_Output,
+	PARAM_PlaySecondsRemaining,
+	PARAM_FadeSecondsRemaining,
+	PARAM_FaderLight,
+	maxNumParameters
+};
+
+#define STATE_IDLE 0
+#define STATE_PLAYING 1
+#define STATE_FADING 2
+#define STATE_DONE 3
+
+#define MAX_PLAY_DURATION 180  // 3 minutes
+#define MAX_FADE_DURATION 30   // 30 seconds
+
+class TimedFader : public IVdjPluginDsp8
 {
 public:
 	HRESULT VDJ_API OnLoad();
@@ -17,14 +39,27 @@ public:
 	HRESULT VDJ_API OnProcessSamples(float *buffer, int nb);
 
 private:
-	int Bpm;
-	int StartPos;
+	void UpdateDisplay();
+	float GetNextFaderStep();
 
-	/* if you want to work on short samples (16 bit) instead of float samples (32 bit):
-	short bufferShort[8194];
-	void ConvertFloat2Short(short *BufferOut, float *BufferIn, int BufferSize);
-	void ConvertShort2Float(float *BufferOut, short *BufferIn, int BufferSize);
-	*/
+	float fPlayDurationParameter;
+	float fFadeDurationParameter;
+	float fPlayDuration;
+	float fFadeDuration;
+	float fPlaySecondsRemaining;
+	float fFadeSecondsRemaining;
+	float muteGain;
+
+	int currentFaderFrameCount; // current step (out of the total # of frames)
+	float currentFaderMultiplier; // amount to fade in each step
+	int faderSteps; // number of steps
+	float fOutput;
+
+	int state; // 0 = none, 1 = playing, 2 = fading
+
+	float fSecondsPerFrame;
+	float fFadeDurationInFrames;
+
 };
 
 #endif
