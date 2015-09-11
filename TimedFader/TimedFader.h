@@ -25,8 +25,16 @@ enum
 #define STATE_FADING 2
 #define STATE_DONE 3
 
-#define MAX_PLAY_DURATION 180  // 3 minutes
+#define MAX_PLAY_DURATION 100  // 3 minutes
 #define MAX_FADE_DURATION 30   // 30 seconds
+
+// ID Parameters
+#define ID_INIT         -1  //useful so I can call UpdateDisplay the first time without actually updating a particular GUI element
+#define ID_SLIDER_PLAY 1
+#define ID_SLIDER_FADE  2
+#define ID_STRING_PLAY   3
+#define ID_STRING_FADE   4
+
 
 class TimedFader : public IVdjPluginDsp8
 {
@@ -36,6 +44,7 @@ public:
 	ULONG VDJ_API Release();
 	HRESULT VDJ_API OnStart();
 	HRESULT VDJ_API OnStop();
+	HRESULT VDJ_API OnParameter(int id);
 	HRESULT VDJ_API OnProcessSamples(float *buffer, int nb);
 
 private:
@@ -59,7 +68,8 @@ private:
 
 	float fSecondsPerFrame;
 	float fFadeDurationInFrames;
-
+	char fadeDurationString[128];
+	char playDurationString[128];
 };
 
 #endif

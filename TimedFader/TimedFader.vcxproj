@@ -60,7 +60,7 @@
     </Link>
     <CustomBuildStep>
       <Command>del D:\Users\Spencer\Documents\VirtualDJ\Plugins\SoundEffect\TimedFader.dll
-cp D:\GIT\TimedFaderVirtualDJ\TimedFader\Debug\TimedFader.dll D:\Users\Spencer\Documents\VirtualDJ\Plugins\SoundEffect\</Command>
+copy D:\GIT\TimedFaderVirtualDJ\TimedFader\Debug\TimedFader.dll D:\Users\Spencer\Documents\VirtualDJ\Plugins\SoundEffect\</Command>
     </CustomBuildStep>
     <CustomBuildStep>
       <Message>Copying DLL into VirtualDJ</Message>

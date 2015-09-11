@@ -8,11 +8,8 @@ HRESULT VDJ_API TimedFader::OnLoad()
 	faderSteps = 15;
 	currentFaderFrameCount = 1;
 
-	fPlayDuration = 10.0f;
-	fFadeDuration = 3.0f;
-	fPlaySecondsRemaining = fPlayDuration;
-	fFadeSecondsRemaining = fFadeDuration;
-	fFadeDurationInFrames = fFadeDuration*(float)SampleRate;
+	fPlayDurationParameter = 10.0f;
+	fFadeDurationParameter = 3.0f;
 
 	state = STATE_DONE;
 
@@ -21,14 +18,20 @@ HRESULT VDJ_API TimedFader::OnLoad()
 
 	fSecondsPerFrame = 1.0f / (float)SampleRate;
 
+	// Display inits
+	DeclareParameterSlider(&fPlayDurationParameter, ID_SLIDER_PLAY, "Play Seconds", "PlaySec", 1.0);
+	DeclareParameterSlider(&fFadeDurationParameter, ID_SLIDER_FADE, "Fade Seconds", "FadeSec", 0.5);
+	DeclareParameterString(playDurationString, ID_STRING_PLAY, "Play Remaining", "PlaySec", sizeof(playDurationString));
+	DeclareParameterString(fadeDurationString, ID_STRING_FADE, "Fade Remaining", "FadeSec", sizeof(fadeDurationString));
+	OnParameter(ID_INIT);
 	return S_OK;
 }
 //-----------------------------------------------------------------------------
 HRESULT VDJ_API TimedFader::OnGetPluginInfo(TVdjPluginInfo8 *infos)
 {
-	infos->PluginName = "MyPlugin8";
-	infos->Author = "Atomix Productions";
-	infos->Description = "My first VirtualDJ 8 plugin";
+	infos->PluginName = "TimedFader";
+	infos->Author = "Fowie.com";
+	infos->Description = "Timed play and fade";
 	infos->Version = "1.0";
 	infos->Flags = 0x00; // you could also use VDJFLAG_PROCESSAFTERSTOP if you want to process sound when the deck is stopped
 	infos->Bitmap = NULL;
@@ -59,6 +62,41 @@ HRESULT VDJ_API TimedFader::OnStop()
 	currentFaderFrameCount = 1;
 	faderSteps = 15;
 
+	return S_OK;
+}
+HRESULT VDJ_API TimedFader::OnParameter(int id)
+{
+	if (id == ID_SLIDER_PLAY || id == ID_INIT)
+	{
+		fPlayDuration = fPlayDurationParameter * MAX_PLAY_DURATION;
+		if (state != STATE_PLAYING)
+		{
+			fPlaySecondsRemaining = fPlayDuration;
+		}
+	}
+
+	if (id == ID_SLIDER_FADE || id == ID_INIT)
+	{
+		fFadeDuration = fFadeDurationParameter * MAX_FADE_DURATION;
+		fFadeDurationInFrames = fFadeDuration*(float)SampleRate;
+		if (state != STATE_FADING)
+		{
+			fFadeSecondsRemaining = fFadeDuration;
+		}
+	}
+
+
+	if (id == ID_STRING_PLAY || id == ID_INIT)
+	{
+		// do nothing, only allow editing by the knobs
+	}
+
+	if (id == ID_STRING_FADE || id == ID_INIT)
+	{
+		// do nothing
+	}
+
+	UpdateDisplay(); // this will update the strings
 	return S_OK;
 }
 //---------------------------------------------------------------------------
@@ -182,7 +220,7 @@ HRESULT VDJ_API TimedFader::OnProcessSamples(float *buffer, int nb)
 		}
 		break;
 	}
-
+	UpdateDisplay();
 	return S_OK;
 }
 // Gives a nice logarithmic curve [0,1.0] based on the total number of frames in the fade duration and the current frame we're on
@@ -224,4 +262,13 @@ float TimedFader::GetNextFaderStep()
 	}
 
 	return step;
+}
+void TimedFader::UpdateDisplay()
+{
+	// Convert values in a string. New compilators may ask sprintf_s()
+	sprintf_s(fadeDurationString, "%.2f s", fFadeSecondsRemaining);
+	sprintf_s(playDurationString, "%.2f s", fPlaySecondsRemaining);
+
+	// Update the inferface
+	SendCommand("effect_redraw");
 }
