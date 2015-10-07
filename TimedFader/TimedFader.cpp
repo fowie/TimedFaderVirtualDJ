@@ -69,6 +69,7 @@ HRESULT VDJ_API TimedFader::OnParameter(int id)
 	if (id == ID_SLIDER_PLAY || id == ID_INIT)
 	{
 		fPlayDuration = fPlayDurationParameter * MAX_PLAY_DURATION;
+		fPlayDuration = round(fPlayDuration);
 		if (state != STATE_PLAYING)
 		{
 			fPlaySecondsRemaining = fPlayDuration;
@@ -78,6 +79,7 @@ HRESULT VDJ_API TimedFader::OnParameter(int id)
 	if (id == ID_SLIDER_FADE || id == ID_INIT)
 	{
 		fFadeDuration = fFadeDurationParameter * MAX_FADE_DURATION;
+		fFadeDuration = round(fFadeDuration);
 		fFadeDurationInFrames = fFadeDuration*(float)SampleRate;
 		if (state != STATE_FADING)
 		{
@@ -266,8 +268,8 @@ float TimedFader::GetNextFaderStep()
 void TimedFader::UpdateDisplay()
 {
 	// Convert values in a string. New compilators may ask sprintf_s()
-	sprintf_s(fadeDurationString, "%.2f s", fFadeSecondsRemaining);
-	sprintf_s(playDurationString, "%.2f s", fPlaySecondsRemaining);
+	sprintf(fadeDurationString, "%.2f s", fFadeSecondsRemaining);
+	sprintf(playDurationString, "%.2f s", fPlaySecondsRemaining);
 
 	// Update the inferface
 	SendCommand("effect_redraw");

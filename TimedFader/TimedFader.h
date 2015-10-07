@@ -25,8 +25,8 @@ enum
 #define STATE_FADING 2
 #define STATE_DONE 3
 
-#define MAX_PLAY_DURATION 100  // 3 minutes
-#define MAX_FADE_DURATION 30   // 30 seconds
+#define MAX_PLAY_DURATION 480  // 3 minutes
+#define MAX_FADE_DURATION 10   // 30 seconds
 
 // ID Parameters
 #define ID_INIT         -1  //useful so I can call UpdateDisplay the first time without actually updating a particular GUI element

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>DE234A3E-763C-4258-BE14-4CCC4E221D99</string>
+	<key>IDESourceControlProjectName</key>
+	<string>timedfader</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>7644FB55-6438-4213-AE62-271AE8BC0DEA</key>
+		<string>https://github.com/fowie/TimedFaderVirtualDJ.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>TimedFader/XCode/timedfader.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>7644FB55-6438-4213-AE62-271AE8BC0DEA</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/fowie/TimedFaderVirtualDJ.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>7644FB55-6438-4213-AE62-271AE8BC0DEA</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7644FB55-6438-4213-AE62-271AE8BC0DEA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>TimedFaderVirtualDJ</string>
+		</dict>
+	</array>
+</dict>
+</plist>
