@@ -8,7 +8,8 @@ HRESULT VDJ_API TimedFader::OnLoad()
 	faderSteps = 15;
 	currentFaderFrameCount = 1;
 
-	fPlayDurationParameter = 10.0f;
+	fPlayMinDurationParameter = 0.0f;
+	fPlaySecDurationParameter = 0.0f;
 	fFadeDurationParameter = 3.0f;
 
 	state = STATE_DONE;
@@ -19,7 +20,8 @@ HRESULT VDJ_API TimedFader::OnLoad()
 	fSecondsPerFrame = 1.0f / (float)SampleRate;
 
 	// Display inits
-	DeclareParameterSlider(&fPlayDurationParameter, ID_SLIDER_PLAY, "Play Seconds", "PlaySec", 1.0);
+	DeclareParameterSlider(&fPlayMinDurationParameter, ID_SLIDER_PLAY_MINUTES, "Play Min", "PlayMin", 1.0);
+	DeclareParameterSlider(&fPlaySecDurationParameter, ID_SLIDER_PLAY_SECONDS, "Play Seconds", "PlaySec", 0.5);
 	DeclareParameterSlider(&fFadeDurationParameter, ID_SLIDER_FADE, "Fade Seconds", "FadeSec", 0.5);
 	DeclareParameterString(playDurationString, ID_STRING_PLAY, "Play Remaining", "PlaySec", sizeof(playDurationString));
 	DeclareParameterString(fadeDurationString, ID_STRING_FADE, "Fade Remaining", "FadeSec", sizeof(fadeDurationString));
@@ -66,9 +68,11 @@ HRESULT VDJ_API TimedFader::OnStop()
 }
 HRESULT VDJ_API TimedFader::OnParameter(int id)
 {
-	if (id == ID_SLIDER_PLAY || id == ID_INIT)
+	if (id == ID_SLIDER_PLAY_MINUTES || id == ID_SLIDER_PLAY_SECONDS || id == ID_INIT)
 	{
-		fPlayDuration = fPlayDurationParameter * MAX_PLAY_DURATION;
+		// Round minutes to full minutes
+		float min = round(fPlayMinDurationParameter * MAX_PLAY_MIN_DURATION);
+		fPlayDuration = min*60 + fPlaySecDurationParameter * MAX_PLAY_SEC_DURATION;
 		fPlayDuration = round(fPlayDuration);
 		if (state != STATE_PLAYING)
 		{

@@ -9,31 +9,22 @@
 // round() is only defined in C++11 so we use this workaround
 #define round(v) ((int)floor((v)+0.5f))
 
-enum
-{
-	PARAM_PlayDuration = 0,
-	PARAM_FadeDuration,
-	PARAM_Output,
-	PARAM_PlaySecondsRemaining,
-	PARAM_FadeSecondsRemaining,
-	PARAM_FaderLight,
-	maxNumParameters
-};
-
 #define STATE_IDLE 0
 #define STATE_PLAYING 1
 #define STATE_FADING 2
 #define STATE_DONE 3
 
-#define MAX_PLAY_DURATION 480  // 3 minutes
-#define MAX_FADE_DURATION 10   // 30 seconds
+#define MAX_PLAY_MIN_DURATION 4  // 3 minutes
+#define MAX_PLAY_SEC_DURATION 59
+#define MAX_FADE_DURATION 15   // 30 seconds
 
 // ID Parameters
 #define ID_INIT         -1  //useful so I can call UpdateDisplay the first time without actually updating a particular GUI element
-#define ID_SLIDER_PLAY 1
-#define ID_SLIDER_FADE  2
-#define ID_STRING_PLAY   3
-#define ID_STRING_FADE   4
+#define ID_SLIDER_PLAY_MINUTES 1
+#define ID_SLIDER_PLAY_SECONDS 2
+#define ID_SLIDER_FADE  3
+#define ID_STRING_PLAY   4
+#define ID_STRING_FADE   5
 
 
 class TimedFader : public IVdjPluginDsp8
@@ -51,7 +42,8 @@ private:
 	void UpdateDisplay();
 	float GetNextFaderStep();
 
-	float fPlayDurationParameter;
+	float fPlayMinDurationParameter;
+	float fPlaySecDurationParameter;
 	float fFadeDurationParameter;
 	float fPlayDuration;
 	float fFadeDuration;
